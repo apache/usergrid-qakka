@@ -19,12 +19,19 @@
 package org.apache.usergrid.persistence.qakka.api.impl;
 
 import org.glassfish.jersey.server.ResourceConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class JerseyResourceConfig extends ResourceConfig {
+    private static final Logger logger = LoggerFactory.getLogger( JerseyResourceConfig.class );
 
     public JerseyResourceConfig() {
-        packages( "org.apache.usergrid.persistence.qakka.api" );
+        
+        String apiPackage = "org.apache.usergrid.persistence.qakka.api";
+        logger.info("Configuring API packages: " + apiPackage );
+        
+        packages( apiPackage );
     }
 }
 

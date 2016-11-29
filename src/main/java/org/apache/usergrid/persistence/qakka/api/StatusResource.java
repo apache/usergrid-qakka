@@ -47,7 +47,9 @@ public class StatusResource {
     @Inject
     public StatusResource( App app ) {
         this.app = app;
+        logger.info( "Constructed" );
     }
+
 
     @GET
     @Produces( MediaType.APPLICATION_JSON )

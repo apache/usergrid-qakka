@@ -22,14 +22,13 @@ package org.apache.usergrid.persistence.qakka.api;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
+import org.apache.usergrid.persistence.qakka.URIStrategy;
 import org.apache.usergrid.persistence.qakka.core.*;
-import org.apache.usergrid.persistence.qakka.exceptions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
@@ -60,6 +59,8 @@ public class QueueResource {
         this.queueMessageManager       = queueMessageManager;
         this.uriStrategy               = uriStrategy;
         this.regions                   = regions;
+
+        logger.info("Constructed");
     }
 
 

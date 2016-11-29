@@ -22,16 +22,21 @@ import com.google.inject.AbstractModule;
 import org.apache.usergrid.persistence.actorsystem.ActorSystemModule;
 import org.apache.usergrid.persistence.core.guice.CommonModule;
 import org.apache.usergrid.persistence.qakka.QakkaModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
  * Created by Dave Johnson (snoopdave@apache.org) on 9/14/16.
  */
 public class GuiceWebModule extends AbstractModule {
+    private static final Logger logger = LoggerFactory.getLogger( GuiceWebModule.class );
 
-
+    
     @Override
     protected void configure() {
+        logger.info("Installing Guice modules");
+        
         install( new CommonModule() );
         install( new ActorSystemModule() );
         install( new QakkaStandaloneModule() );

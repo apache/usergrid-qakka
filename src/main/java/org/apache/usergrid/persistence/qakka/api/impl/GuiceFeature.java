@@ -22,6 +22,8 @@ import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.ServiceLocatorProvider;
 import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
 import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
@@ -30,10 +32,13 @@ import javax.ws.rs.ext.Provider;
 
 @Provider
 public class GuiceFeature implements Feature {
-
+    private static final Logger logger = LoggerFactory.getLogger( GuiceFeature.class );
+    
     @Override
     public boolean configure(FeatureContext context) {
 
+        logger.info("Hooking Qakka Guice injector into Jersey and HK2"); 
+        
         ServiceLocator serviceLocator = ServiceLocatorProvider.getServiceLocator( context );
         GuiceBridge.getGuiceBridge().initializeGuiceBridge( serviceLocator );
 

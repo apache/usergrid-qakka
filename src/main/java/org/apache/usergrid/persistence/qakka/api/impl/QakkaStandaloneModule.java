@@ -30,12 +30,13 @@ import org.slf4j.LoggerFactory;
  * Created by Dave Johnson (snoopdave@apache.org) on 11/28/16.
  */
 public class QakkaStandaloneModule extends AbstractModule {
-    private static final Logger logger = LoggerFactory.getLogger( QakkaModule.class );
+    private static final Logger logger = LoggerFactory.getLogger( QakkaStandaloneModule.class );
 
     static {
         try {
             // load properties from one properties file using Netflix Archaius so that GuicyFig will see them
             ConfigurationManager.loadCascadedPropertiesFromResources( "qakka" );
+            logger.info("qakka.properties loaded");
         } catch (Throwable t) {
             logger.error("Unable to load qakka.properties");
         }

@@ -44,7 +44,7 @@ public class StartupListener extends GuiceServletContextListener {
             LogManager.getLogManager().reset();
             SLF4JBridgeHandler.install();
 
-            logger.info("Setting up injector");
+            logger.info("Creating injector and installing GuiceWebModule");
             
             INJECTOR = Guice.createInjector( new ServletModule() {
                 @Override
@@ -53,8 +53,8 @@ public class StartupListener extends GuiceServletContextListener {
                 }
             } );
 
+            logger.info("Starting Qakka and Akka Cluster...");
             APP = INJECTOR.getInstance( App.class );
-
             APP.start();
 
         } catch ( Throwable t ) {
