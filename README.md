@@ -1,6 +1,6 @@
 # Qakka
 
-Standalone version of Usergrid's Qakka distributed &amp; multi-region queue service.
+Standalone version of Usergrid's Qakka queue service.
 
 Features:
 
