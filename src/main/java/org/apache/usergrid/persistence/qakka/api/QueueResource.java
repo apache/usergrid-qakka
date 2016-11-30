@@ -22,6 +22,10 @@ package org.apache.usergrid.persistence.qakka.api;
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream;
 import com.google.common.base.Preconditions;
 import com.google.common.io.ByteStreams;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponses;
 import org.apache.usergrid.persistence.qakka.URIStrategy;
 import org.apache.usergrid.persistence.qakka.core.*;
 import org.slf4j.Logger;
@@ -38,6 +42,7 @@ import java.util.List;
 import java.util.UUID;
 
 
+@Api(value="/queues", description = "Queue management, send, get and ack.")
 @Path("queues")
 public class QueueResource {
     private static final Logger logger = LoggerFactory.getLogger( QueueResource.class );
@@ -64,6 +69,11 @@ public class QueueResource {
     }
 
 
+    @ApiOperation(value = "Create new queue.", response=ApiResponse.class)
+    @ApiResponses(value = { 
+        @io.swagger.annotations.ApiResponse(code = 400, 
+                message = "No Queue object posted, or name field is missing"),
+    })
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
@@ -80,6 +90,11 @@ public class QueueResource {
     }
 
 
+    @ApiOperation(value = "Update Queue configuration.", response=ApiResponse.class)
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 400,
+                    message = "No Queue object posted, or name field is missing"),
+    })
     @PUT
     @Path( "{queueName}/config" )
     @Consumes({MediaType.APPLICATION_JSON})
@@ -98,6 +113,11 @@ public class QueueResource {
     }
 
 
+    @ApiOperation(value = "Delete Queue.", response=ApiResponse.class)
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 400,
+                    message = "Queue name or confirm flag missing."),
+    })
     @DELETE
     @Path( "{queueName}" )
     @Produces({MediaType.APPLICATION_JSON})
@@ -119,10 +139,16 @@ public class QueueResource {
     }
 
 
+    @ApiOperation(value = "Get Queue config.", response=ApiResponse.class)
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 400,
+                    message = "Queue name or confirm flag missing."),
+    })
     @GET
     @Path( "{queueName}/config" )
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getQueueConfig( @PathParam("queueName") String queueName) {
+    public Response getQueueConfig(
+            @ApiParam(value = "Name of Queue", required = true) @PathParam("queueName") String queueName) {
 
         Preconditions.checkArgument(!QakkaUtils.isNullOrEmpty(queueName), "Queue name is required");
 
@@ -136,25 +162,27 @@ public class QueueResource {
     }
 
 
+    @ApiOperation(value = "Get list of all Queues.", response=ApiResponse.class)
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public List<String> getListOfQueues() {
 
         // TODO: create design to handle large number of queues, e.g. paging and/or hierarchy of queues
-
         // TODO: create design to support multi-tenant usage, authentication, etc.
-
         return queueManager.getListOfQueues();
     }
 
 
-    @GET
-    @Path( "{queueName}/stats" )
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getQueueStats( @PathParam("queueName") String queueName) throws Exception {
-        // TODO: implement GET /queues/{queueName}/stats
-        throw new UnsupportedOperationException();
-    }
+//    @GET
+//    @Path( "{queueName}/stats" )
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public Response getQueueStats(
+//            @ApiParam(value = "Name of Queue", required = true) @PathParam("queueName") String queueName) 
+//        throws Exception {
+//        
+//        // TODO: implement GET /queues/{queueName}/stats
+//        throw new UnsupportedOperationException();
+//    }
 
 
     Long convertDelayParameter(String delayParam) {
@@ -207,16 +235,25 @@ public class QueueResource {
      * @param expirationParam   Time (ms) after which message will expire (not yet supported)
      * @param messageBody       JSON payload in string form
      */
+    @ApiOperation(value = "Send Queue Message with a JSON payload.", response=ApiResponse.class) 
     @POST
     @Path( "{queueName}/messages" )
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response sendMessageJson(
-            @PathParam("queueName")                     String queueName,
-            @QueryParam("regions" )   @DefaultValue("") String regionsParam,
+            
+            @ApiParam(value = "Name of Queue", required = true)
+                @PathParam("queueName") String queueName,
+
+            @ApiParam(value = "Regions to which message is to be sent", required = false)
+                @QueryParam("regions" ) @DefaultValue("") String regionsParam,
+
             @QueryParam("delay")      @DefaultValue("") String delayParam,
             @QueryParam("expiration") @DefaultValue("") String expirationParam,
-                                                        String messageBody) throws Exception {
+            
+            @ApiParam(value = "Data to be send with Queue Message", required = true)                                               String messageBody) 
+            
+            throws Exception {
 
         return sendMessage( queueName, regionsParam, delayParam, expirationParam,
                 MediaType.APPLICATION_JSON, ByteBuffer.wrap( messageBody.getBytes() ) );
@@ -233,18 +270,30 @@ public class QueueResource {
      * @param actualContentType Content type of messageBody data (if not application/octet-stream)
      * @param messageBody       Binary data that is the payload of the queue message
      */
+    @ApiOperation(value = "Send Queue Message with a binary data (blob) payload.", response=ApiResponse.class) 
     @POST
     @Path( "{queueName}/messages" )
     @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Produces(MediaType.APPLICATION_JSON)
     public Response sendMessageBinary(
-            @PathParam("queueName")                     String queueName,
-            @QueryParam("regions" )   @DefaultValue("") String regionsParam,
-            @QueryParam("delay")      @DefaultValue("") String delayParam,
+            
+            @ApiParam(value = "Name of Queue", required = true) 
+                @PathParam("queueName") String queueName,
+            
+            @ApiParam(value = "Regions to which message is to be sent", required = false)    
+                @QueryParam("regions" ) @DefaultValue("") String regionsParam,
+            
+            @QueryParam("delay") @DefaultValue("") String delayParam,
             @QueryParam("expiration") @DefaultValue("") String expirationParam,
-            @QueryParam("contentType")                  String actualContentType,
-                                                        byte[] messageBody) throws Exception {
-
+            
+            @ApiParam(value = "Content type of the data to be sent with Queue Message", required = true) 
+                @QueryParam("contentType") String actualContentType,
+            
+            @ApiParam(value = "Data to be send with Queue Message", required = true) 
+                byte[] messageBody) 
+            
+            throws Exception { 
+        
         String contentType = actualContentType != null ? actualContentType : MediaType.APPLICATION_OCTET_STREAM;
 
         return sendMessage( queueName, regionsParam, delayParam, expirationParam,
@@ -286,11 +335,22 @@ public class QueueResource {
     }
 
 
+    @ApiOperation(value = "Get next Queue Messages from a Queue", response=ApiResponse.class)
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 400, message = "Invalid count parameter"),
+    })
     @GET
     @Path( "{queueName}/messages" )
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getNextMessages( @PathParam("queueName") String queueName,
-                                     @QueryParam("count") @DefaultValue("1") String countParam) throws Exception {
+    public Response getNextMessages(
+            
+            @ApiParam(value = "Name of Queue", required = false)
+                @PathParam("queueName") String queueName,
+            
+            @ApiParam(value = "Number of messages to get", required = false)
+                @QueryParam("count") @DefaultValue("1") String countParam) 
+            
+            throws Exception {
 
         Preconditions.checkArgument( !QakkaUtils.isNullOrEmpty( queueName ), "Queue name is required" );
 
@@ -320,11 +380,23 @@ public class QueueResource {
     }
 
 
+    @ApiOperation(value = "Acknowledge that Queue Message has been processed.", response=ApiResponse.class)
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 400, 
+                    message = "Queue Message ID invalid, or message not in-flight"),
+    })
     @DELETE
     @Path( "{queueName}/messages/{queueMessageId}" )
     @Produces({MediaType.APPLICATION_JSON})
-    public Response ackMessage( @PathParam("queueName") String queueName,
-                                @PathParam("queueMessageId") String queueMessageId) throws Exception {
+    public Response ackMessage(
+            
+            @ApiParam(value = "Name of Queue", required = true)
+                @PathParam("queueName") String queueName,
+            
+            @ApiParam(value = "ID of Queue Message to be acknowledged", required = true)
+                @PathParam("queueMessageId") String queueMessageId) 
+            
+            throws Exception {
 
         Preconditions.checkArgument( !QakkaUtils.isNullOrEmpty( queueName ), "Queue name is required" );
 
@@ -341,11 +413,20 @@ public class QueueResource {
     }
 
 
+    @ApiOperation(value = "Get data associated with a Queue Message.", response=ApiResponse.class)
+    @ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 400, message = "Message ID invalid"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "Queue Message or data not found")
+    })
     @GET
     @Path( "{queueName}/data/{queueMessageId}" )
     public Response getMessageData(
-            @PathParam("queueName") String queueName,
-            @PathParam("queueMessageId") String queueMessageIdParam ) {
+            
+            @ApiParam(value = "Name of Queue", required = true)
+                @PathParam("queueName") String queueName,
+
+            @ApiParam(value = "ID of Queue Message for which data is to be returned", required = true)
+                @PathParam("queueMessageId") String queueMessageIdParam ) {
 
         Preconditions.checkArgument(!QakkaUtils.isNullOrEmpty(queueName), "Queue name is required");
 

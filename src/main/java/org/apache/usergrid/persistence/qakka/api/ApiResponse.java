@@ -19,6 +19,8 @@
 
 package org.apache.usergrid.persistence.qakka.api;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.usergrid.persistence.qakka.core.Queue;
 import org.apache.usergrid.persistence.qakka.core.QueueMessage;
 
@@ -26,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
 
 
+@ApiModel(value="ApiResponse", description="Response returned by most Queue API calls.")
 @XmlRootElement
 public class ApiResponse {
 
@@ -34,6 +37,7 @@ public class ApiResponse {
     private Collection<Queue> queues;
     private Collection<QueueMessage> queueMessages;
 
+    @ApiModelProperty(value = "Queues returned but the call, or empty if not applicable.")
     public Collection<Queue> getQueues() {
         return queues;
     }
@@ -42,6 +46,7 @@ public class ApiResponse {
         this.queues = queues;
     }
 
+    @ApiModelProperty(value = "Queues Messages returned by the call, or empty if not applicable.")
     public Collection<QueueMessage> getQueueMessages() {
         return queueMessages;
     }
@@ -50,6 +55,7 @@ public class ApiResponse {
         this.queueMessages = queueMessages;
     }
 
+    @ApiModelProperty(value = "Count of Queues or QueueMessages returned by the call.")
     public Integer getCount() {
         return count;
     }
@@ -58,6 +64,7 @@ public class ApiResponse {
         this.count = count;
     }
 
+    @ApiModelProperty(value = "Informative message intended for client.")
     public String getMessage() {
         return message;
     }

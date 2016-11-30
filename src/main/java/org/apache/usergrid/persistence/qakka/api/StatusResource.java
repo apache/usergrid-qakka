@@ -21,6 +21,8 @@ package org.apache.usergrid.persistence.qakka.api;
 
 import com.codahale.metrics.Timer;
 import com.google.inject.servlet.RequestScoped;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.usergrid.persistence.qakka.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +39,7 @@ import java.util.HashMap;
 import java.util.SortedSet;
 
 
+@Api(value="/status", description = "Status end-point.")
 @Path("status")
 @RequestScoped
 public class StatusResource {
@@ -50,7 +53,8 @@ public class StatusResource {
         logger.info( "Constructed" );
     }
 
-
+    
+    @ApiOperation(value = "Status of webapp.")
     @GET
     @Produces( MediaType.APPLICATION_JSON )
     public Object status() {
