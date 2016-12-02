@@ -32,6 +32,13 @@ You can learn more about Qakka internals by reading this [Google Slides presenta
 Qakka was developed as for this JIRA Issue: [USERGRID-1318](https://issues.apache.org/jira/browse/USERGRID-1318).
 
 
+## How to use Qakka
+
+We don't have any examples of Qakka REST API use yet, but we do have Swagger generated docs:
+
+* [Qakka REST API docs](http://petstore.swagger.io/?url=https://raw.githubusercontent.com/apache/usergrid-qakka/master/docs/swagger.json)
+
+
 ## How to build Qakka
 
 Qakka is unreleased software and if you want to use it, you will have to built it. Here are the steps to build Qakka:
