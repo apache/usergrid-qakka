@@ -28,7 +28,7 @@ import com.google.inject.Injector;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.usergrid.persistence.qakka.QakkaFig;
 import org.apache.usergrid.persistence.qakka.URIStrategy;
-import org.apache.usergrid.persistence.qakka.api.impl.StartupListener;
+import org.apache.usergrid.persistence.qakka.api.impl.GuiceStartupListener;
 import org.apache.usergrid.persistence.qakka.core.QueueMessage;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,6 +46,11 @@ import java.util.*;
 import static org.junit.Assert.fail;
 
 
+/**
+ * Tests for the Qakka REST API.
+ * 
+ * FYI: There is also a complete set of Qakka tests in the Usergrid Queue modulea.
+ */
 public class QueueResourceTest extends AbstractRestTest {
     private static final Logger logger = LoggerFactory.getLogger( QueueResourceTest.class );
 
@@ -65,7 +70,7 @@ public class QueueResourceTest extends AbstractRestTest {
                 .post( Entity.entity( queueMap, MediaType.APPLICATION_JSON_TYPE));
 
         Assert.assertEquals( 201, response.getStatus() );
-        URIStrategy uriStrategy = StartupListener.INJECTOR.getInstance( URIStrategy.class );
+        URIStrategy uriStrategy = GuiceStartupListener.INJECTOR.getInstance( URIStrategy.class );
         Assert.assertEquals( uriStrategy.queueURI( queueName ).toString(), response.getHeaderString( "location" ) );
 
         // get queue by name
@@ -94,7 +99,7 @@ public class QueueResourceTest extends AbstractRestTest {
                 .post( Entity.entity( queueMap, MediaType.APPLICATION_JSON_TYPE));
 
         Assert.assertEquals( 201, response.getStatus() );
-        URIStrategy uriStrategy = StartupListener.INJECTOR.getInstance( URIStrategy.class );
+        URIStrategy uriStrategy = GuiceStartupListener.INJECTOR.getInstance( URIStrategy.class );
         Assert.assertEquals( uriStrategy.queueURI( queueName ).toString(), response.getHeaderString( "location" ) );
 
         // delete queue without confirm = true, should fail with bad request
@@ -379,7 +384,7 @@ public class QueueResourceTest extends AbstractRestTest {
 
             // wait for remaining of the messages to timeout
 
-            QakkaFig qakkaFig = StartupListener.INJECTOR.getInstance( QakkaFig.class );
+            QakkaFig qakkaFig = GuiceStartupListener.INJECTOR.getInstance( QakkaFig.class );
             Thread.sleep( 2 * qakkaFig.getQueueTimeoutSeconds() * 1000 );
 
             // now, the remaining messages cannot be acked because they timed out
@@ -404,7 +409,7 @@ public class QueueResourceTest extends AbstractRestTest {
     @Test
     public void testConvertDelayParameter() {
 
-        Injector injector = StartupListener.INJECTOR;
+        Injector injector = GuiceStartupListener.INJECTOR;
         QueueResource queueResource = injector.getInstance( QueueResource.class );
 
         Assert.assertEquals( 0L, queueResource.convertDelayParameter( "" ).longValue() );
@@ -423,7 +428,7 @@ public class QueueResourceTest extends AbstractRestTest {
     @Test
     public void testConvertExpirationParameter() {
 
-        Injector injector = StartupListener.INJECTOR;
+        Injector injector = GuiceStartupListener.INJECTOR;
         QueueResource queueResource = injector.getInstance( QueueResource.class );
 
         Assert.assertNull( queueResource.convertExpirationParameter( "" ) );

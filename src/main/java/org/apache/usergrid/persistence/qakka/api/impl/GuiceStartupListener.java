@@ -31,8 +31,8 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 import java.util.logging.LogManager;
 
 
-public class StartupListener extends GuiceServletContextListener {
-    private static final Logger logger = LoggerFactory.getLogger( StartupListener.class );
+public class GuiceStartupListener extends GuiceServletContextListener {
+    private static final Logger logger = LoggerFactory.getLogger( GuiceStartupListener.class );
 
     public static App APP = null;
 

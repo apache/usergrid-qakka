@@ -29,8 +29,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Dave Johnson (snoopdave@apache.org) on 11/28/16.
  */
-public class QakkaStandaloneModule extends AbstractModule {
-    private static final Logger logger = LoggerFactory.getLogger( QakkaStandaloneModule.class );
+public class GuiceModule extends AbstractModule {
+    private static final Logger logger = LoggerFactory.getLogger( GuiceModule.class );
 
     static {
         try {

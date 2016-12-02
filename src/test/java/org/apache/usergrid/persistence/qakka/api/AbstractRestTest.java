@@ -22,7 +22,7 @@ package org.apache.usergrid.persistence.qakka.api;
 
 import org.apache.usergrid.persistence.qakka.KeyspaceDropper;
 import org.apache.usergrid.persistence.qakka.api.impl.JerseyResourceConfig;
-import org.apache.usergrid.persistence.qakka.api.impl.StartupListener;
+import org.apache.usergrid.persistence.qakka.api.impl.GuiceStartupListener;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.ServletDeploymentContext;
@@ -57,7 +57,7 @@ abstract public class AbstractRestTest extends JerseyTest {
     @Override
     protected DeploymentContext configureDeployment() {
         if ( context == null ) {
-            context = ServletDeploymentContext.builder( configure() ) .addListener( StartupListener.class ).build();
+            context = ServletDeploymentContext.builder( configure() ) .addListener( GuiceStartupListener.class ).build();
         }
         return context;
     }

@@ -19,9 +19,12 @@
 package org.apache.usergrid.persistence.qakka.api.impl;
 
 import com.google.inject.AbstractModule;
+import com.netflix.config.ConfigurationManager;
 import org.apache.usergrid.persistence.actorsystem.ActorSystemModule;
 import org.apache.usergrid.persistence.core.guice.CommonModule;
 import org.apache.usergrid.persistence.qakka.QakkaModule;
+import org.apache.usergrid.persistence.qakka.api.QakkaStandaloneFig;
+import org.safehaus.guicyfig.GuicyFigModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +35,15 @@ import org.slf4j.LoggerFactory;
 public class GuiceWebModule extends AbstractModule {
     private static final Logger logger = LoggerFactory.getLogger( GuiceWebModule.class );
 
+    static {
+        try {
+            // load properties from one properties file using Netflix Archaius so that GuicyFig will see them
+            ConfigurationManager.loadCascadedPropertiesFromResources( "qakka" );
+            logger.info("qakka.properties loaded");
+        } catch (Throwable t) {
+            logger.error("Unable to load qakka.properties");
+        }
+    }
     
     @Override
     protected void configure() {
@@ -39,7 +51,10 @@ public class GuiceWebModule extends AbstractModule {
         
         install( new CommonModule() );
         install( new ActorSystemModule() );
-        install( new QakkaStandaloneModule() );
+        
+        install( new QakkaModule() );
+        install( new GuicyFigModule( QakkaStandaloneFig.class ) );
+        install( new GuiceShiroModule() );
     }
 
 }

@@ -43,7 +43,7 @@ public class GuiceFeature implements Feature {
         GuiceBridge.getGuiceBridge().initializeGuiceBridge( serviceLocator );
 
         GuiceIntoHK2Bridge guiceBridge = serviceLocator.getService( GuiceIntoHK2Bridge.class );
-        guiceBridge.bridgeGuiceInjector( StartupListener.INJECTOR );
+        guiceBridge.bridgeGuiceInjector( GuiceStartupListener.INJECTOR );
 
         return true;
     }
