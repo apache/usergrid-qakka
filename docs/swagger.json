@@ -1,0 +1,405 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API for Qakka Queue System",
+    "version" : "v1",
+    "title" : "Qakka",
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "queues",
+    "description" : "Queue management, send, get and ack."
+  }, {
+    "name" : "status",
+    "description" : "Status end-point."
+  } ],
+  "paths" : {
+    "/queues" : {
+      "get" : {
+        "tags" : [ "queues" ],
+        "summary" : "Get list of all Queues.",
+        "description" : "",
+        "operationId" : "getListOfQueues",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "queues" ],
+        "summary" : "Create new queue.",
+        "description" : "",
+        "operationId" : "createQueue",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          },
+          "400" : {
+            "description" : "No Queue object posted, or name field is missing"
+          }
+        }
+      }
+    },
+    "/queues/{queueName}" : {
+      "delete" : {
+        "tags" : [ "queues" ],
+        "summary" : "Delete Queue.",
+        "description" : "",
+        "operationId" : "deleteQueue",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "queueName",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "confirm",
+          "in" : "query",
+          "required" : false,
+          "type" : "boolean",
+          "default" : false
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          },
+          "400" : {
+            "description" : "Queue name or confirm flag missing."
+          }
+        }
+      }
+    },
+    "/queues/{queueName}/config" : {
+      "get" : {
+        "tags" : [ "queues" ],
+        "summary" : "Get Queue config.",
+        "description" : "",
+        "operationId" : "getQueueConfig",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "queueName",
+          "in" : "path",
+          "description" : "Name of Queue",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          },
+          "400" : {
+            "description" : "Queue name or confirm flag missing."
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "queues" ],
+        "summary" : "Update Queue configuration.",
+        "description" : "",
+        "operationId" : "updateQueueConfig",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "queueName",
+          "in" : "path",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          },
+          "400" : {
+            "description" : "No Queue object posted, or name field is missing"
+          }
+        }
+      }
+    },
+    "/queues/{queueName}/data/{queueMessageId}" : {
+      "get" : {
+        "tags" : [ "queues" ],
+        "summary" : "Get data associated with a Queue Message.",
+        "description" : "",
+        "operationId" : "getMessageData",
+        "parameters" : [ {
+          "name" : "queueName",
+          "in" : "path",
+          "description" : "Name of Queue",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "queueMessageId",
+          "in" : "path",
+          "description" : "ID of Queue Message for which data is to be returned",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          },
+          "400" : {
+            "description" : "Message ID invalid"
+          },
+          "404" : {
+            "description" : "Queue Message or data not found"
+          }
+        }
+      }
+    },
+    "/queues/{queueName}/messages" : {
+      "get" : {
+        "tags" : [ "queues" ],
+        "summary" : "Get next Queue Messages from a Queue",
+        "description" : "",
+        "operationId" : "getNextMessages",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "queueName",
+          "in" : "path",
+          "description" : "Name of Queue",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "count",
+          "in" : "query",
+          "description" : "Number of messages to get",
+          "required" : false,
+          "type" : "string",
+          "default" : "1"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          },
+          "400" : {
+            "description" : "Invalid count parameter"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "queues" ],
+        "summary" : "Send Queue Message with a binary data (blob) payload.",
+        "description" : "",
+        "operationId" : "sendMessageBinary",
+        "consumes" : [ "application/octet-stream" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "queueName",
+          "in" : "path",
+          "description" : "Name of Queue",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "regions",
+          "in" : "query",
+          "description" : "Regions to which message is to be sent",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "delay",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "expiration",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "contentType",
+          "in" : "query",
+          "description" : "Content type of the data to be sent with Queue Message",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Data to be send with Queue Message",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "byte"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/queues/{queueName}/messages/{queueMessageId}" : {
+      "delete" : {
+        "tags" : [ "queues" ],
+        "summary" : "Acknowledge that Queue Message has been processed.",
+        "description" : "",
+        "operationId" : "ackMessage",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "queueName",
+          "in" : "path",
+          "description" : "Name of Queue",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "queueMessageId",
+          "in" : "path",
+          "description" : "ID of Queue Message to be acknowledged",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/ApiResponse"
+            }
+          },
+          "400" : {
+            "description" : "Queue Message ID invalid, or message not in-flight"
+          }
+        }
+      }
+    },
+    "/status" : {
+      "get" : {
+        "tags" : [ "status" ],
+        "summary" : "Status of webapp.",
+        "description" : "",
+        "operationId" : "status",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "object"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "ApiResponse" : {
+      "type" : "object",
+      "properties" : {
+        "message" : {
+          "type" : "string",
+          "description" : "Informative message intended for client."
+        },
+        "count" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Count of Queues or QueueMessages returned by the call."
+        },
+        "queues" : {
+          "type" : "array",
+          "description" : "Queues returned but the call, or empty if not applicable.",
+          "items" : {
+            "$ref" : "#/definitions/Queue"
+          }
+        },
+        "queueMessages" : {
+          "type" : "array",
+          "description" : "Queues Messages returned by the call, or empty if not applicable.",
+          "items" : {
+            "$ref" : "#/definitions/QueueMessage"
+          }
+        }
+      },
+      "description" : "Response returned by most Queue API calls."
+    },
+    "Queue" : {
+      "type" : "object",
+      "required" : [ "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "Name of queue, must be unique."
+        }
+      },
+      "description" : "Specifies the configuration for a Queue."
+    },
+    "QueueMessage" : {
+      "type" : "object",
+      "required" : [ "queueName" ],
+      "properties" : {
+        "queueMessageId" : {
+          "type" : "string",
+          "format" : "uuid",
+          "description" : "UUID of Queue Message in local region."
+        },
+        "messageId" : {
+          "type" : "string",
+          "format" : "uuid",
+          "description" : "UUID of Message Data associated with this Queue Message"
+        },
+        "queueName" : {
+          "type" : "string",
+          "description" : "Name of Queue for message."
+        },
+        "sendingRegion" : {
+          "type" : "string",
+          "description" : "Region from which was sent"
+        },
+        "receivingRegion" : {
+          "type" : "string",
+          "description" : "Regions to which message will be sent"
+        },
+        "createDate" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Date that message was received by system."
+        },
+        "contentType" : {
+          "type" : "string",
+          "description" : "Content-type of data associated with QueueMessage."
+        },
+        "data" : {
+          "type" : "string",
+          "description" : "Embedded JSON to be sent with Queue Message."
+        },
+        "href" : {
+          "type" : "string",
+          "description" : "URL of data associated with Queue Message (if not embedded JSON)"
+        }
+      },
+      "description" : "A Queue Message"
+    }
+  }
+}

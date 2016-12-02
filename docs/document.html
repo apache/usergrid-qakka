@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html>
+<title>API Document</title>
+
+<xmp theme="united" style="display:none;">
+#Qakka
+
+
+API for Qakka Queue System
+
+
+
+**Version** v1
+
+[**Apache 2.0**](http://www.apache.org/licenses/LICENSE-2.0.html)
+
+
+
+
+
+
+
+
+
+
+# APIs
+
+
+## /queues
+
+
+### GET
+
+<a id="getListOfQueues">Get list of all Queues.</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+
+##### Parameters
+
+
+
+
+
+
+#### Response
+
+**Content-Type: ** application/json
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | <a href="#/definitions/ApiResponse">ApiResponse</a>|
+
+
+
+
+
+
+
+### POST
+
+
+<a id="createQueue">Create new queue.</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+**Content-Type: ** application/json
+
+##### Parameters
+
+
+
+
+
+
+#### Response
+
+**Content-Type: ** application/json
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | <a href="#/definitions/ApiResponse">ApiResponse</a>|
+| 400    | No Queue object posted, or name field is missing |  - |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## /queues/{queueName}
+
+
+
+
+
+
+
+
+### DELETE
+
+<a id="deleteQueue">Delete Queue.</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+
+##### Parameters
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Located in</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Schema</th>
+    </tr>
+
+
+
+<tr>
+    <th>queueName</th>
+    <td>path</td>
+    <td>yes</td>
+    <td></td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+<tr>
+    <th>confirm</th>
+    <td>query</td>
+    <td>no</td>
+    <td></td>
+    <td> - </td>
+
+    
+            <td>boolean </td>
+    
+
+</tr>
+
+
+</table>
+
+
+
+#### Response
+
+**Content-Type: ** application/json
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | <a href="#/definitions/ApiResponse">ApiResponse</a>|
+| 400    | Queue name or confirm flag missing. |  - |
+
+
+
+
+
+
+
+
+
+
+
+
+## /queues/{queueName}/config
+
+
+### GET
+
+<a id="getQueueConfig">Get Queue config.</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+
+##### Parameters
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Located in</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Schema</th>
+    </tr>
+
+
+
+<tr>
+    <th>queueName</th>
+    <td>path</td>
+    <td>yes</td>
+    <td>Name of Queue</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+
+</table>
+
+
+
+#### Response
+
+**Content-Type: ** application/json
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | <a href="#/definitions/ApiResponse">ApiResponse</a>|
+| 400    | Queue name or confirm flag missing. |  - |
+
+
+
+
+
+### PUT
+
+<a id="updateQueueConfig">Update Queue configuration.</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+**Content-Type: ** application/json
+
+##### Parameters
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Located in</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Schema</th>
+    </tr>
+
+
+
+<tr>
+    <th>queueName</th>
+    <td>path</td>
+    <td>yes</td>
+    <td></td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+
+</table>
+
+
+
+#### Response
+
+**Content-Type: ** application/json
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | <a href="#/definitions/ApiResponse">ApiResponse</a>|
+| 400    | No Queue object posted, or name field is missing |  - |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## /queues/{queueName}/data/{queueMessageId}
+
+
+### GET
+
+<a id="getMessageData">Get data associated with a Queue Message.</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+
+##### Parameters
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Located in</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Schema</th>
+    </tr>
+
+
+
+<tr>
+    <th>queueName</th>
+    <td>path</td>
+    <td>yes</td>
+    <td>Name of Queue</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+<tr>
+    <th>queueMessageId</th>
+    <td>path</td>
+    <td>yes</td>
+    <td>ID of Queue Message for which data is to be returned</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+
+</table>
+
+
+
+#### Response
+
+
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | <a href="#/definitions/ApiResponse">ApiResponse</a>|
+| 400    | Message ID invalid |  - |
+| 404    | Queue Message or data not found |  - |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## /queues/{queueName}/messages
+
+
+### GET
+
+<a id="getNextMessages">Get next Queue Messages from a Queue</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+
+##### Parameters
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Located in</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Schema</th>
+    </tr>
+
+
+
+<tr>
+    <th>queueName</th>
+    <td>path</td>
+    <td>yes</td>
+    <td>Name of Queue</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+<tr>
+    <th>count</th>
+    <td>query</td>
+    <td>no</td>
+    <td>Number of messages to get</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+
+</table>
+
+
+
+#### Response
+
+**Content-Type: ** application/json
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | <a href="#/definitions/ApiResponse">ApiResponse</a>|
+| 400    | Invalid count parameter |  - |
+
+
+
+
+
+
+
+### POST
+
+
+<a id="sendMessageBinary">Send Queue Message with a binary data (blob) payload.</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+**Content-Type: ** application/octet-stream
+
+##### Parameters
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Located in</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Schema</th>
+    </tr>
+
+
+
+<tr>
+    <th>queueName</th>
+    <td>path</td>
+    <td>yes</td>
+    <td>Name of Queue</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+<tr>
+    <th>regions</th>
+    <td>query</td>
+    <td>no</td>
+    <td>Regions to which message is to be sent</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+<tr>
+    <th>delay</th>
+    <td>query</td>
+    <td>no</td>
+    <td></td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+<tr>
+    <th>expiration</th>
+    <td>query</td>
+    <td>no</td>
+    <td></td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+<tr>
+    <th>contentType</th>
+    <td>query</td>
+    <td>yes</td>
+    <td>Content type of the data to be sent with Queue Message</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+<tr>
+    <th>body</th>
+    <td>body</td>
+    <td>yes</td>
+    <td>Data to be send with Queue Message</td>
+    <td> - </td>
+
+    <td>
+    Array[<a href=""></a>]
+    
+    </td>
+
+</tr>
+
+
+</table>
+
+
+
+#### Response
+
+**Content-Type: ** application/json
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | <a href="#/definitions/ApiResponse">ApiResponse</a>|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## /queues/{queueName}/messages/{queueMessageId}
+
+
+
+
+
+
+
+
+### DELETE
+
+<a id="ackMessage">Acknowledge that Queue Message has been processed.</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+
+##### Parameters
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Located in</th>
+        <th>Required</th>
+        <th>Description</th>
+        <th>Default</th>
+        <th>Schema</th>
+    </tr>
+
+
+
+<tr>
+    <th>queueName</th>
+    <td>path</td>
+    <td>yes</td>
+    <td>Name of Queue</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+<tr>
+    <th>queueMessageId</th>
+    <td>path</td>
+    <td>yes</td>
+    <td>ID of Queue Message to be acknowledged</td>
+    <td> - </td>
+
+    
+            <td>string </td>
+    
+
+</tr>
+
+
+</table>
+
+
+
+#### Response
+
+**Content-Type: ** application/json
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | <a href="#/definitions/ApiResponse">ApiResponse</a>|
+| 400    | Queue Message ID invalid, or message not in-flight |  - |
+
+
+
+
+
+
+
+
+
+
+
+
+## /status
+
+
+### GET
+
+<a id="status">Status of webapp.</a>
+
+
+
+
+
+
+
+
+
+#### Request
+
+
+
+##### Parameters
+
+
+
+
+
+
+#### Response
+
+**Content-Type: ** application/json
+
+
+| Status Code | Reason      | Response Model |
+|-------------|-------------|----------------|
+| 200    | successful operation | |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Definitions
+
+## <a name="/definitions/ApiResponse">ApiResponse</a>
+
+<p> Response returned by most Queue API calls. </p>
+
+<table border="1">
+    <tr>
+        <th>name</th>
+        <th>type</th>
+        <th>required</th>
+        <th>description</th>
+        <th>example</th>
+    </tr>
+    
+        <tr>
+            <td>message</td>
+            <td>
+                
+                    
+                    string
+                
+            </td>
+            <td>optional</td>
+            <td>Informative message intended for client.</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>count</td>
+            <td>
+                
+                    
+                    integer (int32)
+                
+            </td>
+            <td>optional</td>
+            <td>Count of Queues or QueueMessages returned by the call.</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>queues</td>
+            <td>
+                
+                
+                    array[<a href="#/definitions/Queue">Queue</a>]
+                
+                
+                
+            </td>
+            <td>optional</td>
+            <td>Queues returned but the call, or empty if not applicable.</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>queueMessages</td>
+            <td>
+                
+                
+                    array[<a href="#/definitions/QueueMessage">QueueMessage</a>]
+                
+                
+                
+            </td>
+            <td>optional</td>
+            <td>Queues Messages returned by the call, or empty if not applicable.</td>
+            <td></td>
+        </tr>
+    
+</table>
+
+## <a name="/definitions/Queue">Queue</a>
+
+<p> Specifies the configuration for a Queue. </p>
+
+<table border="1">
+    <tr>
+        <th>name</th>
+        <th>type</th>
+        <th>required</th>
+        <th>description</th>
+        <th>example</th>
+    </tr>
+    
+        <tr>
+            <td>name</td>
+            <td>
+                
+                    
+                    string
+                
+            </td>
+            <td>required</td>
+            <td>Name of queue, must be unique.</td>
+            <td></td>
+        </tr>
+    
+</table>
+
+## <a name="/definitions/QueueMessage">QueueMessage</a>
+
+<p> A Queue Message </p>
+
+<table border="1">
+    <tr>
+        <th>name</th>
+        <th>type</th>
+        <th>required</th>
+        <th>description</th>
+        <th>example</th>
+    </tr>
+    
+        <tr>
+            <td>queueMessageId</td>
+            <td>
+                
+                    
+                    string (uuid)
+                
+            </td>
+            <td>optional</td>
+            <td>UUID of Queue Message in local region.</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>messageId</td>
+            <td>
+                
+                    
+                    string (uuid)
+                
+            </td>
+            <td>optional</td>
+            <td>UUID of Message Data associated with this Queue Message</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>queueName</td>
+            <td>
+                
+                    
+                    string
+                
+            </td>
+            <td>required</td>
+            <td>Name of Queue for message.</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>sendingRegion</td>
+            <td>
+                
+                    
+                    string
+                
+            </td>
+            <td>optional</td>
+            <td>Region from which was sent</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>receivingRegion</td>
+            <td>
+                
+                    
+                    string
+                
+            </td>
+            <td>optional</td>
+            <td>Regions to which message will be sent</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>createDate</td>
+            <td>
+                
+                    
+                    integer (int64)
+                
+            </td>
+            <td>optional</td>
+            <td>Date that message was received by system.</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>contentType</td>
+            <td>
+                
+                    
+                    string
+                
+            </td>
+            <td>optional</td>
+            <td>Content-type of data associated with QueueMessage.</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>data</td>
+            <td>
+                
+                    
+                    string
+                
+            </td>
+            <td>optional</td>
+            <td>Embedded JSON to be sent with Queue Message.</td>
+            <td></td>
+        </tr>
+    
+        <tr>
+            <td>href</td>
+            <td>
+                
+                    
+                    string
+                
+            </td>
+            <td>optional</td>
+            <td>URL of data associated with Queue Message (if not embedded JSON)</td>
+            <td></td>
+        </tr>
+    
+</table>
+
+
+
+</xmp>
+
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+</html>
